@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#0a0c14">
+<title>Trimskit • Admin Forge</title>
+<style>
+:root{color-scheme:dark;--bg:#090b12;--panel:#111725;--panel2:#171f30;--line:#2a3650;--text:#eff4ff;--muted:#9caac4;--mint:#5cf0d2;--blue:#8b9dff;--pink:#ff79b7;--gold:#ffd47d;--danger:#ff718b}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;min-height:100vh;overflow-x:hidden;background:radial-gradient(ellipse at 10% 0%,#182f49 0,transparent 36%),radial-gradient(ellipse at 95% 10%,#33204b 0,transparent 32%),var(--bg);font:15px/1.5 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.18;background-image:radial-gradient(#90a6d9 1px,transparent 1px);background-size:27px 27px;mask-image:linear-gradient(to bottom,#000,transparent 80%)}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.shell{max-width:1120px;margin:auto;padding:26px 18px 55px;position:relative}
+.top{display:flex;align-items:center;gap:14px;margin-bottom:24px;animation:drop .65s cubic-bezier(.2,.8,.2,1) both}
+.logo{width:58px;height:58px;border-radius:18px;display:grid;place-items:center;font-size:29px;font-weight:1000;color:#07131b;background:linear-gradient(135deg,var(--mint),var(--blue));box-shadow:0 8px 35px #5cf0d238;position:relative;overflow:hidden}
+.logo:after{content:"";position:absolute;inset:-70%;background:linear-gradient(90deg,transparent,#ffffff80,transparent);transform:rotate(35deg);animation:shine 4s infinite}
+h1{font-size:clamp(25px,4vw,38px);line-height:1.05;letter-spacing:-1px;margin:0}
+.grad{background:linear-gradient(90deg,var(--mint),#a2b1ff 55%,var(--pink));background-clip:text;color:transparent}
+.sub{color:var(--muted);margin-top:7px}.status-pill{margin-left:auto;border:1px solid #285e5a;background:#102a2b;color:var(--mint);padding:7px 11px;border-radius:999px;font-size:11px;letter-spacing:.7px;white-space:nowrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;animation:fade .6s .1s both}
+.tab{background:#121a29;border:1px solid var(--line);color:var(--muted);padding:10px 15px;border-radius:12px;font-weight:750;transition:.2s}
+.tab:hover{transform:translateY(-2px);border-color:#65769b;color:var(--text)}
+.tab[aria-selected=true]{background:linear-gradient(120deg,#183a3a,#202746);border-color:#4bcab8;color:#e8fffb;box-shadow:0 6px 22px #55e6d11a}
+.page{display:none;animation:pageIn .35s ease both}.page.active{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.card{background:linear-gradient(155deg,#161e2df5,#101520f5);border:1px solid var(--line);border-radius:19px;padding:21px;box-shadow:0 16px 50px #0002;min-width:0;transition:transform .2s,border-color .2s}
+.card:hover{border-color:#3b4d6c}
+.card h2{font-size:18px;margin:0 0 5px}.desc{font-size:13px;color:var(--muted);margin:0 0 18px}
+.field{margin-bottom:15px}label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+input[type=text],textarea{width:100%;border:1px solid #35435f;border-radius:11px;background:#0b111c;color:var(--text);padding:12px 13px;outline:none;transition:border .2s,box-shadow .2s}
+input:focus,textarea:focus{border-color:var(--mint);box-shadow:0 0 0 3px #5cf0d21b}
+.checks{display:flex;gap:9px;flex-wrap:wrap}.check{display:flex;align-items:center;gap:8px;background:#101827;border:1px solid #303e58;border-radius:11px;padding:10px 12px;cursor:pointer;transition:.2s}.check:hover{border-color:var(--mint);transform:translateY(-1px)}.check input{accent-color:var(--mint);width:16px;height:16px}
+.btnrow{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
+.btn{border:1px solid transparent;border-radius:11px;padding:10px 14px;font-size:13px;font-weight:800;transition:transform .18s,filter .18s,box-shadow .18s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}.btn:active{transform:translateY(0) scale(.98)}
+.primary{background:linear-gradient(115deg,var(--mint),#a1b2ff);color:#08121a;box-shadow:0 5px 20px #5cf0d11c}
+.secondary{background:#202b40;border-color:#374660;color:var(--text)}.danger{background:#351b29;border-color:#6a3047;color:#ff9ab0}
+.notice{border:1px solid #64502c;background:#251f15;color:#ffe3a7;border-radius:12px;padding:12px 14px;font-size:13px;margin-top:16px}.notice strong{color:#fff1ca}
+.list{display:flex;flex-direction:column;gap:9px;margin-top:13px}.entry{display:flex;align-items:center;gap:11px;padding:11px;border:1px solid var(--line);border-radius:13px;background:#101724;animation:pop .25s ease both}.avatar{width:39px;height:39px;flex:0 0 39px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(135deg,#263b53,#34305a);color:var(--mint);font-weight:900}.entrymain{flex:1;min-width:0}.uname{font-weight:800;overflow-wrap:anywhere}.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:4px}.tag{font-size:11px;border:1px solid #3c4a62;color:#c1cde4;background:#1b2637;padding:2px 7px;border-radius:999px}.tag.admin{color:#83f2dd;border-color:#38786f}.tag.sfmode{color:#cabaff;border-color:#695a91}
+.empty{padding:22px;text-align:center;color:var(--muted);border:1px dashed #34425b;border-radius:13px;margin-top:13px}
+textarea{min-height:270px;resize:vertical;font:12px/1.55 ui-monospace,SFMono-Regular,Consolas,monospace}
+.stat{font-size:12px;color:var(--mint);min-height:20px;margin-top:9px}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.step{padding:16px;border:1px solid var(--line);border-radius:14px;background:#101724}.stepnum{width:30px;height:30px;border-radius:10px;background:#213b43;color:var(--mint);display:grid;place-items:center;font-weight:900;margin-bottom:10px}.step p{color:var(--muted);font-size:13px;margin:5px 0 0}
+footer{text-align:center;color:var(--muted);font-size:12px;margin-top:24px}
+.toast{position:fixed;right:18px;bottom:18px;z-index:10;max-width:min(390px,calc(100vw - 36px));padding:13px 16px;border:1px solid #3e8d80;border-radius:13px;background:#102b2b;color:#e4fffa;box-shadow:0 15px 45px #0006;opacity:0;transform:translateY(12px);pointer-events:none;transition:.25s}.toast.show{opacity:1;transform:translateY(0)}
+@keyframes drop{from{opacity:0;transform:translateY(-14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+@keyframes pageIn{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pop{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:scale(1)}}
+@keyframes shine{0%,70%,100%{transform:translateX(-70%) rotate(35deg)}35%{transform:translateX(70%) rotate(35deg)}}
+@media(max-width:760px){.grid{grid-template-columns:1fr}.how{grid-template-columns:1fr}.shell{padding:20px 13px 40px}.card{padding:17px}.status-pill{display:none}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="top">
+  <div class="logo">T</div>
+  <div><h1>Trimskit <span class="grad">Admin Forge</span></h1><div class="sub">Build your own OPS.json. Your data stays on your device.</div></div>
+  <div class="status-pill">✦ LOCAL-ONLY TOOL</div>
+</header>
+
+<nav class="tabs" aria-label="Admin manager pages" role="tablist">
+  <button class="tab" type="button" role="tab" data-page="builder" aria-selected="true">⚒ Builder</button>
+  <button class="tab" type="button" role="tab" data-page="json" aria-selected="false">⌘ JSON preview</button>
+  <button class="tab" type="button" role="tab" data-page="guide" aria-selected="false">✦ Setup guide</button>
+</nav>
+
+<section class="page active" id="page-builder" role="tabpanel">
+  <div class="grid">
+    <article class="card">
+      <h2>✦ Add an operator</h2><p class="desc">Choose a Minecraft username and the permissions they should have.</p>
+      <form id="addForm">
+        <div class="field"><label for="username">Minecraft username</label><input id="username" type="text" maxlength="16" autocomplete="off" placeholder="e.g. Steve_123" pattern="[A-Za-z0-9_]{1,16}" required></div>
+        <div class="field"><label>Permissions</label><div class="checks">
+          <label class="check"><input type="checkbox" id="admin" checked> admin</label>
+          <label class="check"><input type="checkbox" id="sfmode"> sfmode</label>
+        </div></div>
+        <button class="btn primary" type="submit">＋ Add / update operator</button>
+      </form>
+      <div class="notice"><strong>Stay safe:</strong> only grant permissions to people you trust. Keep OPS.json private.</div>
+    </article>
+    <article class="card">
+      <h2>♙ Operator list <span id="count" style="color:var(--muted);font-size:13px">(0)</span></h2><p class="desc">Your entries will be included in the exported file.</p>
+      <div id="operatorList" class="list"></div>
+      <div class="btnrow"><button class="btn secondary" id="clearBtn" type="button">Clear all</button><button class="btn secondary" id="exampleBtn" type="button">Load example</button></div>
+    </article>
+  </div>
+</section>
+
+<section class="page" id="page-json" role="tabpanel">
+  <article class="card">
+    <h2>⌘ Your OPS.json</h2><p class="desc">Check the preview, then download it or copy its contents. Nothing is uploaded.</p>
+    <textarea id="output" spellcheck="false" aria-label="Generated OPS.json" readonly></textarea>
+    <div class="btnrow">
+      <button class="btn primary" id="downloadBtn" type="button">↓ Download OPS.json</button>
+      <button class="btn secondary" id="copyBtn" type="button">▣ Copy JSON</button>
+      <label class="btn secondary" for="importFile" style="margin:0;display:inline-flex;align-items:center">↑ Import JSON</label>
+      <input id="importFile" type="file" accept=".json,application/json" hidden>
+    </div>
+    <div id="jsonStatus" class="stat" aria-live="polite"></div>
+    <div class="notice"><strong>Security:</strong> this tool only creates a file. Trimskit itself must validate permissions server-side and must never let a normal multiplayer client grant itself admin access.</div>
+  </article>
+</section>
+
+<section class="page" id="page-guide" role="tabpanel">
+  <article class="card">
+    <h2>🚀 How to install the configuration</h2><p class="desc">The exact folder depends on how Trimskit is installed and which path its code reads.</p>
+    <div class="how">
+      <div class="step"><div class="stepnum">1</div><strong>Build your list</strong><p>Go to Builder, add the intended usernames, and choose permissions.</p></div>
+      <div class="step"><div class="stepnum">2</div><strong>Export the file</strong><p>Open JSON preview and click Download OPS.json. Check the usernames before using it.</p></div>
+      <div class="step"><div class="stepnum">3</div><strong>Put it in the right folder</strong><p>Single-player: use the local config folder read by the mod. Server: use the server's config folder. Follow Trimskit's actual configured path.</p></div>
+    </div>
+    <div class="notice"><strong>Important:</strong> a public website should not publish real server operator lists or secret codes. Server-side authorization must be enforced by the mod, not by trusting the website or a player's client.</div>
+    <div class="btnrow"><button class="btn primary" type="button" data-goto="builder">← Back to Builder</button><button class="btn secondary" type="button" data-goto="json">Open JSON preview →</button></div>
+  </article>
+</section>
+
+<footer>Trimskit Admin Forge · No account, backend, or network requests · Made for server owners</footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+  "use strict";
+  const $ = id => document.getElementById(id);
+  const operators = new Map();
+  const validUsername = /^[A-Za-z0-9_]{1,16}$/;
+  let toastTimer;
+
+  function notify(message, error=false) {
+    const toast=$("toast"); toast.textContent=message;
+    toast.style.borderColor=error?"#9b4359":"#3e8d80";
+    toast.style.background=error?"#351b29":"#102b2b";
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer=setTimeout(()=>toast.classList.remove("show"),3200);
+  }
+  function configObject() {
+    return {ops:[...operators.values()].sort((a,b)=>a.username.toLowerCase().localeCompare(b.username.toLowerCase())).map(op=>({username:op.username,permissions:[...op.permissions]}))};
+  }
+  function render() {
+    const list=$("operatorList"); list.replaceChildren();
+    $("count").textContent=`(${operators.size})`;
+    if(!operators.size) {
+      const empty=document.createElement("div"); empty.className="empty"; empty.textContent="No operators yet. Add a username to begin ✨"; list.append(empty);
+    } else {
+      for(const op of [...operators.values()].sort((a,b)=>a.username.toLowerCase().localeCompare(b.username.toLowerCase()))) {
+        const entry=document.createElement("div"); entry.className="entry";
+        const avatar=document.createElement("div"); avatar.className="avatar"; avatar.textContent=op.username[0].toUpperCase();
+        const main=document.createElement("div"); main.className="entrymain";
+        const name=document.createElement("div"); name.className="uname"; name.textContent=op.username;
+        const tags=document.createElement("div"); tags.className="tags";
+        for(const permission of op.permissions){const tag=document.createElement("span");tag.className="tag "+permission;tag.textContent=permission;tags.append(tag);}
+        main.append(name,tags);
+        const remove=document.createElement("button"); remove.type="button";remove.className="btn danger";remove.textContent="Remove";
+        remove.addEventListener("click",()=>{operators.delete(op.username.toLowerCase());render();notify("Operator removed from the preview.");});
+        entry.append(avatar,main,remove);list.append(entry);
+      }
+    }
+    $("output").value=JSON.stringify(configObject(),null,2)+"\n";
+  }
+  function showPage(name) {
+    if(!["builder","json","guide"].includes(name)) return;
+    document.querySelectorAll(".tab").forEach(tab=>tab.setAttribute("aria-selected",String(tab.dataset.page===name)));
+    document.querySelectorAll(".page").forEach(page=>page.classList.toggle("active",page.id==="page-"+name));
+    if(name==="json") render();
+  }
+  document.querySelectorAll(".tab").forEach(tab=>tab.addEventListener("click",()=>showPage(tab.dataset.page)));
+  document.querySelectorAll("[data-goto]").forEach(button=>button.addEventListener("click",()=>showPage(button.dataset.goto)));
+
+  $("addForm").addEventListener("submit",event=>{
+    event.preventDefault();
+    const username=$("username").value.trim();
+    if(!validUsername.test(username)){notify("Use 1–16 letters, numbers, or underscores.",true);return;}
+    const permissions=[];
+    if($("admin").checked)permissions.push("admin");
+    if($("sfmode").checked)permissions.push("sfmode");
+    if(!permissions.length){notify("Choose at least one permission.",true);return;}
+    operators.set(username.toLowerCase(),{username,permissions});
+    $("username").value="";render();notify("Operator added! ✨");
+  });
+  $("clearBtn").addEventListener("click",()=>{operators.clear();render();notify("Operator list cleared.");});
+  $("exampleBtn").addEventListener("click",()=>{operators.set("exampleplayer",{username:"exampleplayer",permissions:["admin"]});render();notify("Example added. Replace it before using the file.");});
+  $("downloadBtn").addEventListener("click",()=>{
+    const blob=new Blob([JSON.stringify(configObject(),null,2)+"\n"],{type:"application/json;charset=utf-8"});
+    const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="OPS.json";document.body.append(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1000);$("jsonStatus").textContent="Download started — place OPS.json in Trimskit's correct config folder.";notify("OPS.json download started.");
+  });
+  $("copyBtn").addEventListener("click",async()=>{
+    const text=$("output").value;
+    try{if(!navigator.clipboard||!navigator.clipboard.writeText)throw new Error("clipboard unavailable");await navigator.clipboard.writeText(text);$("jsonStatus").textContent="Copied to clipboard.";notify("JSON copied!");}
+    catch{const area=$("output");area.focus();area.select();let ok=false;try{ok=document.execCommand("copy");}catch{}$("jsonStatus").textContent=ok?"Copied to clipboard.":"Copy blocked by browser — select the text and use Ctrl+C.";notify(ok?"JSON copied!":"Clipboard blocked; use Ctrl+C.",!ok);}
+  });
+  $("importFile").addEventListener("change",async event=>{
+    const file=event.target.files?.[0];if(!file)return;
+    try{
+      const parsed=JSON.parse(await file.text());
+      if(!parsed||!Array.isArray(parsed.ops))throw new Error('Expected JSON with an "ops" array.');
+      const next=new Map();
+      for(const item of parsed.ops){
+        if(!item||typeof item.username!=="string"||!validUsername.test(item.username))continue;
+        const permissions=Array.isArray(item.permissions)?[...new Set(item.permissions.filter(p=>p==="admin"||p==="sfmode"))]:[];
+        if(permissions.length)next.set(item.username.toLowerCase(),{username:item.username,permissions});
+      }
+      operators.clear();for(const [key,value] of next)operators.set(key,value);
+      render();$("jsonStatus").textContent=`Imported ${operators.size} valid operator(s). Review before downloading.`;notify("JSON imported. Please review it.");
+    }catch(error){notify("Import failed: "+error.message,true);}
+    finally{event.target.value="";}
+  });
+  render();
+})();
+</script>
+</body>
+</html>
